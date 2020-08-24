@@ -41,10 +41,8 @@ class LayoutGraph:
 		self.c2 = c2
 
 	def randomizarPosiciones(self):
-		pos = {}
 		for v in self.grafo[0]:
-			pos[v] = ((randint(0, 300), randint(0, 300)))
-		return pos
+			self.posiciones[v] = ((randint(0, 300), randint(0, 300)))
 
 
 	def aristas(self, pos):
@@ -78,13 +76,33 @@ class LayoutGraph:
 
 		plt.show()
 
+	def resetAccum(self):
+		accum = {}
+		for v in self.grafo[0]:
+			accum[v] = 0
+		return accum
+
 	def layout(self):
 		'''
 		Aplica el algoritmo de Fruchtermann-Reingold para obtener (y mostrar)
 		un layout
 		'''
-		pos = self.randomizarPosiciones()
-		self.actualizarPosiciones(pos)
+		self.randomizarPosiciones()
+		#self.actualizarPosiciones(pos)
+		accum = self.resetAccum()
+
+		for (a,b) in self.grafo[1]:
+			f = utils.fuerzaAtraccion(self.posiciones[a], self.posiciones[b])
+			accum[a] += f
+			accum[b] -= f
+
+		for v in self.grafo[0]:
+			for u in self.grafo[0]:
+				if v != u:
+					f = utils.fuerzaRepulsion(self.posiciones[v], self.posiciones[u])
+					accum[v] += f
+					accum[u] -= f
+
 
 
 def main():

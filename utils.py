@@ -1,3 +1,5 @@
+import math
+
 # MARK: Parseo de texto
 def leerGrafo(archivo):
     f = open(archivo, mode='r')
@@ -17,3 +19,9 @@ def leerGrafo(archivo):
     G = (V, E)
 
     return G
+
+diff = lambda v, u: (v[0]-u[0], v[1]-u[1])
+norm = lambda v, u: math.sqrt(sum(a*a for a in diff(v,u)))
+
+fuerzaAtraccion = norm
+fuerzaRepulsion = norm
