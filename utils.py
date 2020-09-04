@@ -20,8 +20,7 @@ def leerGrafo(archivo):
 
     return G
 
-diff = lambda v, u: (v[0]-u[0], v[1]-u[1])
-norm = lambda v, u: math.sqrt(sum(a*a for a in diff(v,u)))
-
-fuerzaAtraccion = norm
-fuerzaRepulsion = norm
+versor = lambda vec: (vec[0]/norm(vec), vec[1]/norm(vec))
+norm = lambda vec: math.sqrt((vec[0]**2)+(vec[1]**2))
+diff = lambda u, v: (u[0]-v[0], u[1]-v[1])
+distancia = lambda u, v: math.sqrt(sum(a*a for a in diff(u,v)))
