@@ -95,15 +95,15 @@ class LayoutGraph:
 		return accum
 
 	def calcularFuerzasGrav(self, accum):
-		# xyCenter = self.lado/2
-		# center = (xyCenter, xyCenter)
-		# for v in self.grafo[0]:
-		# 	posV = self.posiciones[v]
-		# 	dist = max(utils.distancia(center, posV), self.eps)
-		# 	(dx, dy) = utils.diff(posV, center)
-		# 	(fX, fY) = (0.1*dx/dist, 0.1*dy/dist)
-		# 	(vx, vy) = accum[v]
-		# 	accum[v] = (vx+fX,vy+fY)
+		xyCenter = self.lado/2
+		center = (xyCenter, xyCenter)
+		for v in self.grafo[0]:
+			posV = self.posiciones[v]
+			dist = max(utils.distancia(center, posV), self.eps)
+			(dx, dy) = utils.diff(posV, center)
+			(fX, fY) = (0.1*dx/dist, 0.1*dy/dist)
+			(vx, vy) = accum[v]
+			accum[v] = (vx+fX,vy+fY)
 		return accum
 
 	def actualizarPosiciones(self, accum):
