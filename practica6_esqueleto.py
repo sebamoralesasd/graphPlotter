@@ -85,12 +85,14 @@ class LayoutGraph:
 					posU = self.posiciones[u]
 					delta = utils.diff(posV, posU)
 					distance = utils.norm(delta)
+					(ax, ay) = accum[v]
 					if distance > self.eps:
 						modFR = self.fuerzaRep(distance)
 						(dx, dy) = utils.diff(posU, posV)
 						(fx, fy) = (modFR*dx/distance, modFR*dy/distance)
-						(ax, ay) = accum[v]
-						accum[v] = (ax+fx, ay+fy)
+					else:
+						(fx, fy) = (randint(-100, 100), randint(-100, 100))
+					accum[v] = (ax+fx, ay+fy)
 
 		return accum
 
