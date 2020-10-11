@@ -23,7 +23,7 @@ from random import randint
 
 class LayoutGraph:
 
-	def __init__(self, grafo, iters, refresh, c1, c2, verbose=False):
+	def __init__(self, grafo, iters, refresh, temp, c1, c2, verbose=False):
 
 		# Guardo el grafo
 		self.grafo = grafo
@@ -41,7 +41,7 @@ class LayoutGraph:
 		self.c2 = c2			# Coeficiente fuerza repulsión
 		self.lado = 300
 		self.k = sqrt(self.lado * self.lado / len(self.grafo[0]))
-		self.t = 100
+		self.t = temp
 		self.eps = 0.5
 
 	def fuerzaAtr(self, dist):
@@ -86,13 +86,15 @@ class LayoutGraph:
 					delta = utils.diff(posV, posU)
 					distance = utils.norm(delta)
 					(ax, ay) = accum[v]
+					(bx, by) = accum[u]
 					if distance > self.eps:
 						modFR = self.fuerzaRep(distance)
 						(dx, dy) = utils.diff(posU, posV)
 						(fx, fy) = (modFR*dx/distance, modFR*dy/distance)
 					else:
 						(fx, fy) = (randint(-100, 100), randint(-100, 100))
-					accum[v] = (ax+fx, ay+fy)
+					accum[v] = (ax-fx, ay-fy)
+					accum[u] = (bx+fx, by+fy)
 
 		return accum
 
@@ -129,7 +131,6 @@ class LayoutGraph:
 					self.calcularFuerzasRep(
 						self.calcularFuerzasAtr(self.resetAccum())))
 		self.actualizarPosiciones(accum)
-		#print(self.posiciones)
 		self.actualizarTemperatura()
 		self.dibujar()
 
@@ -140,7 +141,6 @@ class LayoutGraph:
 		un layout
 		'''
 		self.randomizarPosiciones()
-		#print(self.posiciones)
 		for i in range(self.iters):
 			self.step()
 
@@ -196,6 +196,15 @@ def main():
 		help='Cantidad de iteraciones a efectuar',
 		default=50
 	)
+
+	# Cantidad de actualizaciones de pantalla, 50 por defecto
+	parser.add_argument(
+		'--refresh',
+		type=int,
+		help='Cantidad de actualizaciones de pantalla',
+		default=50
+	)
+
 	# Temperatura inicial
 	parser.add_argument(
 		'--temp',
@@ -223,9 +232,10 @@ def main():
 	layout_gr = LayoutGraph(
 		G,
 		iters=args.iters,
-		refresh=1,
-		c1=0.1,
-		c2=5.0,
+		refresh=args.refresh,
+		temp=args.temp,
+		c1=5.0,
+		c2=0.1,
 		verbose=args.verbose
 		)
 
