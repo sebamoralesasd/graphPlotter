@@ -35,7 +35,6 @@ class LayoutGraph:
 		# Guardo opciones
 		self.iters = iters
 		self.verbose = verbose
-		# TODO: faltan opciones
 		self.refresh = refresh
 		self.c1 = c1			# Coeficiente fuerza atracción
 		self.c2 = c2			# Coeficiente fuerza repulsión
@@ -126,13 +125,15 @@ class LayoutGraph:
 		self.t *= 0.95
 
 
-	def step(self):
+	def step(self, iteracion):
 		accum = self.calcularFuerzasGrav(
 					self.calcularFuerzasRep(
 						self.calcularFuerzasAtr(self.resetAccum())))
 		self.actualizarPosiciones(accum)
 		self.actualizarTemperatura()
-		self.dibujar()
+		
+		if (iteracion+1) % self.refresh == 0:
+			self.dibujar()
 
 
 	def layout(self):
@@ -142,7 +143,7 @@ class LayoutGraph:
 		'''
 		self.randomizarPosiciones()
 		for i in range(self.iters):
-			self.step()
+			self.step(i)
 
 
 	# Funciones de dibujado
