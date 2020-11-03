@@ -43,6 +43,10 @@ class LayoutGraph:
 		self.t = temp
 		self.eps = 0.5
 
+	def verboseMsg(self, message):
+		if self.verbose:
+			print(message)
+
 	def fuerzaAtr(self, dist):
 		return dist**2/(self.k * self.c1)
 
@@ -126,13 +130,17 @@ class LayoutGraph:
 
 
 	def step(self, iteracion):
+		self.verboseMsg("Calculando fuerzas")
 		accum = self.calcularFuerzasGrav(
 					self.calcularFuerzasRep(
 						self.calcularFuerzasAtr(self.resetAccum())))
+		self.verboseMsg("Actualizando posiciones")
 		self.actualizarPosiciones(accum)
+		self.verboseMsg("Actualizando temperatura")
 		self.actualizarTemperatura()
-		
+
 		if (iteracion+1) % self.refresh == 0:
+			self.verboseMsg("Dibujando")
 			self.dibujar()
 
 
@@ -141,9 +149,12 @@ class LayoutGraph:
 		Aplica el algoritmo de Fruchtermann-Reingold para obtener (y mostrar)
 		un layout
 		'''
+		self.verboseMsg("Calculando posiciones aleatorias")
 		self.randomizarPosiciones()
 		for i in range(self.iters):
+			self.verboseMsg("Iteración numero %d" % (i+1))
 			self.step(i)
+		self.verboseMsg("Fin del algoritmo")
 
 
 	# Funciones de dibujado
@@ -203,7 +214,7 @@ def main():
 		'--refresh',
 		type=int,
 		help='Cantidad de actualizaciones de pantalla',
-		default=50
+		default=2
 	)
 
 	# Temperatura inicial
